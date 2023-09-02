@@ -1,6 +1,6 @@
 {
   "name": "alexohneander-astro",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "scripts": {
     "dev": "astro check --watch & astro dev",
     "start": "astro dev",
