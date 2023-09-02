@@ -2,7 +2,7 @@
 author: Alex Wellnitz
 pubDatetime: 2021-05-06T19:20:27+02:00
 title: Site to Site VPN for Google Kubernetes Engine
-postSlug: baremetal-cni-setup-with-cilium
+postSlug: site-to-site-vpn-for-google-kubernetes-engine
 featured: false
 draft: false
 tags:
