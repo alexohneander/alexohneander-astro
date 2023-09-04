@@ -12,8 +12,7 @@ tags:
   - bash
   - backup
 ogImage: ""
-description:
-  In this post, we will show you how to create a MySQL server backup using Kubernetes CronJobs.
+description: In this post, we will show you how to create a MySQL server backup using Kubernetes CronJobs.
 ---
 
 In this post, we will show you how to create a MySQL server backup using Kubernetes CronJobs.
@@ -22,13 +21,14 @@ In our case, we do not have a managed MySQL server. But we want to backup it to 
 For this we first build a container that can execute our tasks, because we will certainly need several tasks to backup our cluster.
 
 ## CronJob Agent Container
+
 First, we'll show you our Dockerfile so you know what we need.
 
 ```Dockerfile
 FROM alpine:3.10
 
 # Update
-RUN apk --update add --no-cache bash nodejs-current yarn curl busybox-extras vim rsync git mysql-client openssh-client 
+RUN apk --update add --no-cache bash nodejs-current yarn curl busybox-extras vim rsync git mysql-client openssh-client
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl && chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
 # Scripts
@@ -41,6 +41,7 @@ RUN mkdir /var/backup/mysql
 ```
 
 ## Backup Script
+
 And now our backup script which the container executes.
 
 Our script is quite simple, we get all tables with the mysql client, export them as sql file, pack them in a zip file and send them in a 8 hours interval to our NAS.
@@ -89,6 +90,7 @@ rsync -avz $BACKUPDIR/backup-${NOW}.tar.gz root@$BACKUPSERVER:$BACKUPREMOTEDIR
 ```
 
 ## Kubernetes CronJob Deployment
+
 Finally we show you the kubernetes deployment for our agent.
 
 In the deployment, our agent is defined as a CronJob that runs every 8 hours.
@@ -111,7 +113,7 @@ spec:
           containers:
             - name: cronjob-agent
               image: xxx/cronjob-agent
-              command: ["bash",  "/srv/jobs/backup-mariadb.sh"]
+              command: ["bash", "/srv/jobs/backup-mariadb.sh"]
               volumeMounts:
                 - mountPath: /root/.ssh/id_rsa.pub
                   name: cronjob-default-config

@@ -10,8 +10,7 @@ tags:
   - linux
   - backup
 ogImage: ""
-description:
-    Since we all know that the first rule is "no backup, no pity", I'll show you how you can use Borg to back up your important data in an encrypted way with relative ease.
+description: Since we all know that the first rule is "no backup, no pity", I'll show you how you can use Borg to back up your important data in an encrypted way with relative ease.
 ---
 
 Since we all know that the first rule is "no backup, no pity", I'll show you how you can use Borg to back up your important data in an encrypted way with relative ease.
@@ -19,14 +18,17 @@ Since we all know that the first rule is "no backup, no pity", I'll show you how
 If you do not want to use a second computer, but an external hard drive, you can adjust this later in the script and ignore the points in the instructions for the second computer.
 
 ### Requirements
- - 2 Linux Computers
- - Borg
- - SSH
- - Storage
- - More than 5 brain cells
+
+- 2 Linux Computers
+- Borg
+- SSH
+- Storage
+- More than 5 brain cells
 
 ### Installation
+
 First we need to install borg on both computers so that we can back up on one and save on the other.
+
 ```bash
 sudo apt install borgbackup
 ```
@@ -34,11 +36,13 @@ sudo apt install borgbackup
 Then we create a Borg repository. We can either use an external target or a local path.
 
 **External Target:**
+
 ```bash
 borg init --encryption=repokey ssh://user@192.168.2.42:22/mnt/backup/borg
 ```
 
 **Local Path:**
+
 ```bash
 borg init --encryption=repokey /path/to/backup_folder
 ```
@@ -49,6 +53,7 @@ This way you don't have to enter a password and is simply nicer from my point of
 Once you have created everything and prepared the script with your parameters, I recommend that you run the script as a CronJob so that you no longer have to remember to back up your things yourself.
 
 **crontab example:**
+
 ```bash
 #Minute Hour    Day    Month  Day(Week)      command
 #(0-59) (0-23)  (1-31)  (1-12)  (1-7;1=Mo)
@@ -56,6 +61,7 @@ Once you have created everything and prepared the script with your parameters, I
 ```
 
 ### Automated script
+
 ```bash
 #!/bin/sh
 
@@ -113,6 +119,7 @@ exit ${global_exit}
 ```
 
 ### Get your data from the backup
+
 First, we create a temporary directory in which we can mount the backup.
 
 ```bash
@@ -125,7 +132,9 @@ At this point you must remember that you can use an external destination or a lo
 ```bash
 borg mount ssh://user@192.168.2.42/mnt/backup/borg /tmp/borg-backup
 ```
+
 Once our repo is mounted, we can change into the directory and restore files via **rsync** or **cp**.
 
 ### Conclusion
+
 I hope you could understand everything and now secure your shit sensibly. Because without a backup we are all lost!

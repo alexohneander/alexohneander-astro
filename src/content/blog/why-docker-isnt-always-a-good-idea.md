@@ -10,9 +10,8 @@ tags:
   - network
   - haproxy
 ogImage: ""
-description:
-    To briefly explain the situation.
-    We have a **HAProxy** running on a Debian server as a Docker container. This is the entrance node to a **Docker Swarm** cluster.
+description: To briefly explain the situation.
+  We have a **HAProxy** running on a Debian server as a Docker container. This is the entrance node to a **Docker Swarm** cluster.
 ---
 
 To briefly explain the situation:

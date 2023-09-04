@@ -10,8 +10,7 @@ tags:
   - openvpn
   - google
 ogImage: ""
-description:
-   In this tutorial I will try to explain you briefly and concisely how you can set up a site-to-site VPN for the Google Cloud Network.
+description: In this tutorial I will try to explain you briefly and concisely how you can set up a site-to-site VPN for the Google Cloud Network.
 ---
 
 In this tutorial I will try to explain you briefly and concisely how you can set up a site-to-site VPN for the Google Cloud Network.
@@ -23,13 +22,17 @@ We need 2 virtual machines. The first one on the side of our office and the othe
 #### Setup OpenVPN Clients
 
 ##### Site-to-Site Client Office Side
+
 We need to install OpenVPN, we do it as follows:
+
 ```bash
 apt install openvpn -y
 ```
+
 After that we add our OpenVPN configuration under this path `/etc/openvpn/s2s.conf`.
 
-*s2s.conf*
+_s2s.conf_
+
 ```
 # Use a dynamic tun device.
 # For Linux 2.2 or non-Linux OSes,
@@ -40,14 +43,14 @@ After that we add our OpenVPN configuration under this path `/etc/openvpn/s2s.co
 dev tun
 
 # Our OpenVPN peer is the Google gateway.
-remote IP_GOOGLE_VPN_CLIENT 
+remote IP_GOOGLE_VPN_CLIENT
 
 ifconfig 4.1.0.2 4.1.0.1
 
 route 10.156.0.0 255.255.240.0            # Google Cloud VM Network
 route 10.24.0.0 255.252.0.0               # Google Kubernetes Pod Network
 
-push "route 192.168.10.0 255.255.255.0"   # Office Network 
+push "route 192.168.10.0 255.255.255.0"   # Office Network
 
 # Our pre-shared static key
 #secret static.key
@@ -78,11 +81,15 @@ verb 3
 
 log /etc/openvpn/s2s.log
 ```
+
 We also have to enable the IPv4 forward function in the kernel, so we go to `/etc/sysctl.conf` and comment out the following line:
+
 ```
 net.ipv4.ip_forward=1
 ```
+
 We can then start our OpenVPN client with this command:
+
 ```bash
 systemctl start openvpn@s2s
 ```
@@ -90,11 +97,13 @@ systemctl start openvpn@s2s
 On the Office side we have to open the port for the OpenVPN client that the other side can connect.
 
 ##### Site-to-Site Client Google Side
+
 When setting up the OpenVPN client on Google's site, we need to consider the following settings when creating it. When we create the machine, we need to enable this option in the network settings:
 
 ![Google Cloud Network Settings](https://i.imgur.com/OXEkhxo.png)
 
 Also on this side we have to install the OpenVPN client again and then add this config under the path `/etc/openvpn/s2s.conf`:
+
 ```
 # Use a dynamic tun device.
 # For Linux 2.2 or non-Linux OSes,
@@ -105,7 +114,7 @@ Also on this side we have to install the OpenVPN client again and then add this 
 dev tun
 
 # Our OpenVPN peer is the Office gateway.
-remote IP_OFFICE_VPN_CLIENT 
+remote IP_OFFICE_VPN_CLIENT
 
 ifconfig 4.1.0.2 4.1.0.1
 
@@ -143,12 +152,15 @@ verb 3
 
 log /etc/openvpn/s2s.log
 ```
+
 We also have to enable the IPv4 forward function in the kernel, so we go to `/etc/sysctl.conf` and comment out the following line:
+
 ```
 net.ipv4.ip_forward=1
 ```
 
 ##### Connection test
+
 Now that both clients are basically configured we can test the connection. Both clients have to be started with systemctl. After that we look at the logs with `tail -f /etc/openvpn/s2s-log` and wait for this message:
 
 ```
@@ -167,6 +179,7 @@ Wed May  5 08:28:12 2021 Initialization Sequence Completed
 If we can't establish a connection, we need to check if the ports are opened on both sides.
 
 #### Routing Google Cloud Network
+
 After our clients have finished installing and configuring, we need to set the routes on Google. I will not map the Office side, as this is always different. But you have to route the networks for the Google network there as well.
 
 To set the route on Google we go to the network settings and then to Routes. Here you have to specify your office network so that the clients in the Google network know what to do.
@@ -174,6 +187,7 @@ To set the route on Google we go to the network settings and then to Routes. Her
 ![Google Cloud Network Route](https://i.imgur.com/6Q2Drf4.png)
 
 #### IP-Masquerade-Agent
+
 IP masquerading is a form of network address translation (NAT) used to perform many-to-one IP address translations, which allows multiple clients to access a destination using a single IP address. A GKE cluster uses IP masquerading so that destinations outside of the cluster only receive packets from node IP addresses instead of Pod IP addresses. This is useful in environments that expect to only receive packets from node IP addresses.
 
 You have to edit the ip-masq-agent and this configuration is responsible for letting the pods inside the nodes, reach other parts of the GCP VPC Network, more specifically the VPN. So, it allows pods to communicate with the devices that are accessible through the VPN.
@@ -182,11 +196,12 @@ First of all we're gonna be working inside the kube-system namespace, and we're 
 
 ```yaml
 nonMasqueradeCIDRs:
-  - 10.24.0.0/14  # The IPv4 CIDR the cluster is using for Pods (required)
+  - 10.24.0.0/14 # The IPv4 CIDR the cluster is using for Pods (required)
   - 10.156.0.0/20 # The IPv4 CIDR of the subnetwork the cluster is using for Nodes (optional, works without but I guess its better with it)
 masqLinkLocal: false
 resyncInterval: 60s
 ```
+
 and run `kubectl create configmap ip-masq-agent --from-file config --namespace kube-system`
 
 afterwards, configure the ip-masq-agent, put this in a `ip-masq-agent.yml` file:
@@ -205,17 +220,17 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - name: ip-masq-agent
-        image: gcr.io/google-containers/ip-masq-agent-amd64:v2.4.1
-        args:
+        - name: ip-masq-agent
+          image: gcr.io/google-containers/ip-masq-agent-amd64:v2.4.1
+          args:
             - --masq-chain=IP-MASQ
             # To non-masquerade reserved IP ranges by default, uncomment the line below.
             # - --nomasq-all-reserved-ranges
-        securityContext:
-          privileged: true
-        volumeMounts:
-          - name: config
-            mountPath: /etc/config
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: config
+              mountPath: /etc/config
       volumes:
         - name: config
           configMap:
@@ -227,12 +242,12 @@ spec:
               - key: config
                 path: ip-masq-agent
       tolerations:
-      - effect: NoSchedule
-        operator: Exists
-      - effect: NoExecute
-        operator: Exists
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
+        - effect: NoSchedule
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+        - key: "CriticalAddonsOnly"
+          operator: "Exists"
 ```
 
 and run `kubectl -n kube-system apply -f ip-masq-agent.yml`.
