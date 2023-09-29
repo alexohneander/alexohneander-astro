@@ -29,3 +29,19 @@ description: In this post, we will show you how to create a MySQL server backup 
     ]
 }
 ```
+
+### Java Remote VSCode debugging
+**launch.json:**
+```json
+"version": "0.2.0",
+"configurations": [
+    {
+        "type": "java",
+        "name": "Debug (Attach)",
+        "projectName": "MyApplication",
+        "request": "attach",
+        "hostName": "localhost",
+        "port": 8787
+    }
+]
+```
