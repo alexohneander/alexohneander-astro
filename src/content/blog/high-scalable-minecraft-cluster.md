@@ -23,6 +23,9 @@ A Minecraft cluster is a Minecraft server network that consists of multiple Mine
 
 A Minecraft cluster consists of several components. 
 
+<!-- Image -->
+![Minecraft cluster](https://github.com/MultiPaper/MultiPaper/raw/main/assets/multipaper-diagram.jpg)
+
 #### Master database
 First, there is the master database. This database allows servers to store data in a central location that all servers can access. Servers store chunks, maps, level.dat, player data, banned players, and more in this database. This database also records which chunk belongs to which server and coordinates communication between servers.
 
