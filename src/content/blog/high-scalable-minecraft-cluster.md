@@ -79,4 +79,12 @@ The Helm chart creates several ConfigMaps. In these ConfigMaps, you can customiz
 
 For example, you can set the number of maximum players or change the description of the server.
 
-For more information on the individual config files, see[MultiPaper](https://github.com/MultiPaper/MultiPaper).
+For more information on the individual config files, see [MultiPaper](https://github.com/MultiPaper/MultiPaper).
+
+## Conclusion
+
+With this setup, you can easily set up a highly scalable Minecraft cluster. You can easily add new servers if you get more players and remove them again if the number of players decreases again.
+
+You can test this setup under the following Server Address: `minecraft.alexohneander.de:31732`
+
+If you have any questions, feel free to contact me on [Email](mailto:moin@wellnitz-alex.de) or on [Matrix](https://matrix.to/#/@alexohneander:dev-null.rocks).
