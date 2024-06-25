@@ -49,6 +49,18 @@ Agency for internet and design founded in 1998, established in Kastellaun in the
 
 ## Projects
 
+### DevOps Engineer, Cofinity-X
+
+**since 2023**
+
+Cofinity-X is the first operator of the Catena-X network, connecting automotive partners at every level of the value chain. As a DevOps engineer, I was responsible for the enablement services.
+
+- Deployment of various open source Projects with GitOps and ArgoCD
+- Managing projects on a Kubernetes clusters
+- Communication with end customers (support, troubleshooting)
+- Analysis of problems and spikes in load
+- Planning new projects and deploying to the Kubernetes clusters
+
 ### DevOps Engineer, Amamed
 
 **until 2023**
