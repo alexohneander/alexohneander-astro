@@ -17,6 +17,18 @@ ingress:
         add_header Cache-Control "public";
       }
   hosts:
+    - host: www.wellnitz-alex.de
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: www.alexohneander.de
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: wellnitz-alex.de
+      paths:
+        - path: /
+          pathType: Prefix
     - host: alexohneander.de
       paths:
         - path: /
@@ -25,3 +37,6 @@ ingress:
    - secretName: alexohneander-tls
      hosts:
        - alexohneander.de
+       - wellnitz-alex.de
+       - www.alexohneander.de
+       - www.wellnitz-alex.de
