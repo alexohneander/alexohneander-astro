@@ -3,7 +3,7 @@ import type { Site, SocialObjects } from "./types";
 export const SITE: Site = {
   website: "https://astro-paper.pages.dev/",
   author: "Alex Wellnitz",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  desc: "Alex Wellnitz DevOps Architect | Software Developer | Kubernetes Expert | Network Security | Web Performance Optimization. Accelerating web performance and modernizing application delivery.",
   title: "Alexohneander",
   subtitle: "Engineering Chaos",
   ogImage: "astropaper-og.jpg",
